@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Adaptive Flight Dispatcher Quiz</title>
+    <link rel="stylesheet" href="{% load static %}{% static 'styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <h1>✈️ Flight Dispatcher Quiz</h1>
+                <p>AI-Powered Adaptive Learning</p>
+            </div>
+            <div class="user-info" id="userInfo">
+                <span id="userDisplay">Guest</span>
+                <button id="loginBtn" class="btn btn-secondary">Login</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Welcome Screen -->
+            <section id="welcomeScreen" class="screen active">
+                <div class="welcome-content">
+                    <h2>Welcome to the AI Adaptive Flight Dispatcher Quiz</h2>
+                    <p>Test your knowledge with questions that adapt to your skill level</p>
+                    
+                    <div class="features">
+                        <div class="feature-card">
+                            <div class="feature-icon">🎯</div>
+                            <h3>Adaptive Difficulty</h3>
+                            <p>Questions adjust to your skill level for optimal learning</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">📊</div>
+                            <h3>Progress Tracking</h3>
+                            <p>Monitor your performance and improvement over time</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🧠</div>
+                            <h3>AI-Powered</h3>
+                            <p>Smart question selection based on your responses</p>
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button id="startQuizBtn" class="btn btn-primary">Start Quiz</button>
+                        <button id="viewStatsBtn" class="btn btn-secondary">View Statistics</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiz Screen -->
+            <section id="quizScreen" class="screen">
+                <div class="quiz-header">
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                    <div class="quiz-info">
+                        <span id="questionNumber">Question 1</span>
+                        <span id="skillLevel">Skill Level: 0.5</span>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div id="questionText" class="question-text"></div>
+                    
+                    <div id="optionsContainer" class="options-container"></div>
+                    
+                    <div id="shortAnswerContainer" class="short-answer-container" style="display: none;">
+                        <input type="text" id="shortAnswerInput" class="short-answer-input" placeholder="Type your answer here...">
+                    </div>
+                </div>
+
+                <div class="quiz-actions">
+                    <button id="submitAnswerBtn" class="btn btn-primary" disabled>Submit Answer</button>
+                    <button id="skipQuestionBtn" class="btn btn-secondary">Skip</button>
+                </div>
+
+                <div id="feedbackContainer" class="feedback-container" style="display: none;">
+                    <div class="feedback-content">
+                        <div id="feedbackIcon"></div>
+                        <div id="feedbackText"></div>
+                        <div id="correctAnswerText" class="correct-answer-text" style="display: none;"></div>
+                        <div id="difficultyLevelText" class="difficulty-level-text"></div>
+                        <div id="explanationText"></div>
+                        <button id="nextQuestionBtn" class="btn btn-primary">Next Question</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Screen -->
+            <section id="resultsScreen" class="screen">
+                <div class="results-content">
+                    <h2>Quiz Complete!</h2>
+                    <div class="score-display">
+                        <div class="score-circle">
+                            <span id="scorePercentage">0%</span>
+                        </div>
+                        <p id="scoreText">You answered 0 out of 0 questions correctly</p>
+                    </div>
+
+                    <div class="performance-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Accuracy</span>
+                            <span id="accuracyStat" class="stat-value">0%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Average Time</span>
+                            <span id="avgTimeStat" class="stat-value">0s</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Skill Level</span>
+                            <span id="finalSkillLevel" class="stat-value">0.5</span>
+                        </div>
+                    </div>
+
+                    <div class="recommendations">
+                        <h3>Recommendations</h3>
+                        <div id="recommendationsList"></div>
+                    </div>
+
+                    <div class="results-actions">
+                        <button id="retakeQuizBtn" class="btn btn-primary">Retake Quiz</button>
+                        <button id="homeBtn" class="btn btn-secondary">Home</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Screen -->
+            <section id="statsScreen" class="screen">
+                <div class="stats-content">
+                    <h2>Your Statistics</h2>
+                    
+                    <div class="stats-overview">
+                        <div class="overview-card">
+                            <h3>Overall Performance</h3>
+                            <div class="stat-grid">
+                                <div class="stat-item">
+                                    <span class="stat-label">Total Questions</span>
+                                    <span id="totalQuestionsStat" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Correct Answers</span>
+                                    <span id="correctAnswersStat" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Accuracy Rate</span>
+                                    <span id="accuracyRateStat" class="stat-value">0%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Current Skill Level</span>
+                                    <span id="currentSkillLevelStat" class="stat-value">0.5</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="overview-card">
+                            <h3>Recent Sessions</h3>
+                            <div id="recentSessionsList" class="sessions-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="back-actions">
+                        <button id="backToHomeBtn" class="btn btn-secondary">Back to Home</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Application State
+        const app = {
+            currentScreen: 'welcome',
+            currentQuestion: null,
+            currentQuiz: null,
+            userResponses: [],
+            startTime: null,
+            questionStartTime: null,
+            userSkillLevel: 0.5,
+            answeredQuestions: [],
+            
+            // API Base URL
+            apiBase: '/api/quiz/',
+            
+            // Initialize the application
+            init() {
+                this.bindEvents();
+                this.loadSampleData();
+                this.checkAuth();
+            },
+            
+            bindEvents() {
+                // Navigation buttons
+                document.getElementById('startQuizBtn').addEventListener('click', () => this.startQuiz());
+                document.getElementById('viewStatsBtn').addEventListener('click', () => this.showScreen('stats'));
+                document.getElementById('homeBtn').addEventListener('click', () => this.showScreen('welcome'));
+                document.getElementById('backToHomeBtn').addEventListener('click', () => this.showScreen('welcome'));
+                document.getElementById('retakeQuizBtn').addEventListener('click', () => this.startQuiz());
+                
+                // Quiz actions
+                document.getElementById('submitAnswerBtn').addEventListener('click', () => this.submitAnswer());
+                document.getElementById('skipQuestionBtn').addEventListener('click', () => this.skipQuestion());
+                document.getElementById('nextQuestionBtn').addEventListener('click', () => this.nextQuestion());
+                
+                // Answer input handling
+                document.getElementById('shortAnswerInput').addEventListener('input', (e) => {
+                    document.getElementById('submitAnswerBtn').disabled = !e.target.value.trim();
+                });
+            },
+            
+            async checkAuth() {
+                // For simplicity, we'll use a mock user
+                // In a real app, this would check authentication status
+                document.getElementById('userDisplay').textContent = 'Student User';
+                document.getElementById('loginBtn').style.display = 'none';
+            },
+            
+            showScreen(screenName) {
+                // Hide all screens
+                document.querySelectorAll('.screen').forEach(screen => {
+                    screen.classList.remove('active');
+                });
+                
+                // Show the requested screen
+                document.getElementById(screenName + 'Screen').classList.add('active');
+                this.currentScreen = screenName;
+                
+                // Load data if needed
+                if (screenName === 'stats') {
+                    this.loadStatistics();
+                }
+            },
+            
+            async loadSampleData() {
+                try {
+                    const response = await fetch(this.apiBase + 'create-sample-data/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Sample data loaded:', data);
+                    }
+                } catch (error) {
+                    console.error('Error loading sample data:', error);
+                }
+            },
+            
+            async startQuiz() {
+                this.showLoading(true);
+                
+                try {
+                    // Get available quizzes
+                    const quizzesResponse = await fetch(this.apiBase + 'quizzes/');
+                    const quizzes = await quizzesResponse.json();
+                    
+                    if (quizzes.length === 0) {
+                        alert('No quizzes available. Please try again later.');
+                        return;
+                    }
+                    
+                    this.currentQuiz = quizzes[0];
+                    this.userResponses = [];
+                    this.answeredQuestions = [];
+                    this.startTime = Date.now();
+                    
+                    this.showScreen('quiz');
+                    await this.loadNextQuestion();
+                    
+                } catch (error) {
+                    console.error('Error starting quiz:', error);
+                    alert('Error starting quiz. Please try again.');
+                } finally {
+                    this.showLoading(false);
+                }
+            },
+            
+            async loadNextQuestion() {
+                this.showLoading(true);
+                
+                try {
+                    // First try to get AI-generated question
+                    let questionData = null;
+                    
+                    try {
+                        const aiResponse = await fetch(this.apiBase + 'generate-ai-question/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                user_skill_level: this.userSkillLevel,
+                                quiz_category: this.currentQuiz.category || 'Aviation'
+                            })
+                        });
+                        
+                        if (aiResponse.ok) {
+                            const aiResult = await aiResponse.json();
+                            if (aiResult.success && aiResult.question) {
+                                questionData = aiResult.question;
+                                console.log('✅ Generated AI question using Google Gemini');
+                            }
+                        }
+                    } catch (aiError) {
+                        console.log('⚠️ AI question generation failed, falling back to database:', aiError);
+                    }
+                    
+                    // Fallback to adaptive database questions
+                    if (!questionData) {
+                        const response = await fetch(this.apiBase + 'adaptive/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                quiz_id: this.currentQuiz.id,
+                                user_skill_level: this.userSkillLevel,
+                                exclude_question_ids: this.answeredQuestions
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            // No more questions available
+                            this.showResults();
+                            return;
+                        }
+                        
+                        questionData = await response.json();
+                    }
+                    
+                    this.currentQuestion = questionData;
+                    this.questionStartTime = Date.now();
+                    
+                    this.displayQuestion();
+                    
+                } catch (error) {
+                    console.error('Error loading question:', error);
+                    alert('Error loading question. Please try again.');
+                } finally {
+                    this.showLoading(false);
+                }
+            },
+            
+            displayQuestion() {
+                const questionText = document.getElementById('questionText');
+                const optionsContainer = document.getElementById('optionsContainer');
+                const shortAnswerContainer = document.getElementById('shortAnswerContainer');
+                const submitBtn = document.getElementById('submitAnswerBtn');
+                
+                // Update question info
+                document.getElementById('questionNumber').textContent = 
+                    `Question ${this.answeredQuestions.length + 1}`;
+                document.getElementById('skillLevel').textContent = 
+                    `Skill Level: ${this.userSkillLevel.toFixed(2)}`;
+                
+                // Update progress
+                const progress = (this.answeredQuestions.length / 10) * 100; // Assuming 10 questions
+                document.getElementById('progressFill').style.width = `${progress}%`;
+                
+                // Display question text
+                questionText.textContent = this.currentQuestion.question_text;
+                
+                // Reset containers
+                optionsContainer.innerHTML = '';
+                shortAnswerContainer.style.display = 'none';
+                submitBtn.disabled = true;
+                
+                // Display based on question type
+                if (this.currentQuestion.question_type === 'multiple_choice') {
+                    this.displayMultipleChoice(optionsContainer);
+                } else if (this.currentQuestion.question_type === 'true_false') {
+                    this.displayTrueFalse(optionsContainer);
+                } else if (this.currentQuestion.question_type === 'short_answer') {
+                    this.displayShortAnswer(shortAnswerContainer);
+                }
+                
+                // Hide feedback
+                document.getElementById('feedbackContainer').style.display = 'none';
+            },
+            
+            displayMultipleChoice(container) {
+                const options = this.currentQuestion.options;
+                options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option-item';
+                    optionElement.innerHTML = `
+                        <input type="radio" name="answer" id="option${index}" value="${option.charAt(0)}">
+                        <label for="option${index}">${option}</label>
+                    `;
+                    
+                    optionElement.addEventListener('click', () => {
+                        document.getElementById('option' + index).checked = true;
+                        document.getElementById('submitAnswerBtn').disabled = false;
+                    });
+                    
+                    container.appendChild(optionElement);
+                });
+            },
+            
+            displayTrueFalse(container) {
+                const options = ['True', 'False'];
+                options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option-item';
+                    optionElement.innerHTML = `
+                        <input type="radio" name="answer" id="option${index}" value="${option}">
+                        <label for="option${index}">${option}</label>
+                    `;
+                    
+                    optionElement.addEventListener('click', () => {
+                        document.getElementById('option' + index).checked = true;
+                        document.getElementById('submitAnswerBtn').disabled = false;
+                    });
+                    
+                    container.appendChild(optionElement);
+                });
+            },
+            
+            displayShortAnswer(container) {
+                container.style.display = 'block';
+                document.getElementById('shortAnswerInput').value = '';
+                document.getElementById('shortAnswerInput').focus();
+            },
+            
+            async submitAnswer() {
+                const responseTime = (Date.now() - this.questionStartTime) / 1000;
+                let userAnswer = '';
+                
+                // Get user's answer
+                if (this.currentQuestion.question_type === 'short_answer') {
+                    userAnswer = document.getElementById('shortAnswerInput').value.trim();
+                } else {
+                    const selectedOption = document.querySelector('input[name="answer"]:checked');
+                    if (selectedOption) {
+                        userAnswer = selectedOption.value;
+                    }
+                }
+                
+                if (!userAnswer) {
+                    alert('Please select or enter an answer.');
+                    return;
+                }
+                
+                this.showLoading(true);
+                
+                try {
+                    let result;
+                    
+                    // Handle AI-generated questions (no ID) vs database questions
+                    if (this.currentQuestion.id && this.currentQuestion.source !== 'google_gemini') {
+                        // Database question - submit to server
+                        const response = await fetch(
+                            this.apiBase + `questions/${this.currentQuestion.id}/submit_answer/`, 
+                            {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    user_answer: userAnswer,
+                                    response_time: responseTime
+                                })
+                            }
+                        );
+                        result = await response.json();
+                    } else {
+                        // AI-generated question - evaluate locally
+                        result = this.evaluateAIQuestion(userAnswer);
+                    }
+                    
+                    // Record response
+                    this.userResponses.push({
+                        question: this.currentQuestion,
+                        user_answer: userAnswer,
+                        is_correct: result.is_correct,
+                        response_time: responseTime
+                    });
+                    
+                    // Use a unique identifier for AI questions
+                    const questionId = this.currentQuestion.id || `ai_${Date.now()}`;
+                    this.answeredQuestions.push(questionId);
+                    
+                    // Update skill level
+                    if (result.is_correct) {
+                        this.userSkillLevel = Math.min(1.0, this.userSkillLevel + 0.05);
+                    } else {
+                        this.userSkillLevel = Math.max(0.0, this.userSkillLevel - 0.03);
+                    }
+                    
+                    // Show feedback
+                    this.showFeedback(result);
+                    
+                } catch (error) {
+                    console.error('Error submitting answer:', error);
+                    alert('Error submitting answer. Please try again.');
+                } finally {
+                    this.showLoading(false);
+                }
+            },
+            
+            showFeedback(result) {
+                const feedbackContainer = document.getElementById('feedbackContainer');
+                const feedbackIcon = document.getElementById('feedbackIcon');
+                const feedbackText = document.getElementById('feedbackText');
+                const correctAnswerText = document.getElementById('correctAnswerText');
+                const difficultyLevelText = document.getElementById('difficultyLevelText');
+                const explanationText = document.getElementById('explanationText');
+                
+                // Get question info
+                const question = this.currentQuestion;
+                const difficultyLevel = question.difficulty_level || 0.5;
+                const difficultyLabel = this.getDifficultyLabel(difficultyLevel);
+                
+                // Set feedback content
+                if (result.is_correct) {
+                    feedbackIcon.innerHTML = '✅';
+                    feedbackText.textContent = 'Correct! Well done.';
+                    feedbackText.className = 'feedback-text correct';
+                    correctAnswerText.style.display = 'none';
+                } else {
+                    feedbackIcon.innerHTML = '❌';
+                    feedbackText.textContent = 'Incorrect.';
+                    feedbackText.className = 'feedback-text incorrect';
+                    
+                    // Show correct answer
+                    const correctAnswer = this.getCorrectAnswerDisplay(question, result.correct_answer);
+                    correctAnswerText.textContent = `Correct answer: ${correctAnswer}`;
+                    correctAnswerText.style.display = 'block';
+                }
+                
+                // Show difficulty level
+                difficultyLevelText.textContent = `Difficulty: ${difficultyLabel} (${(difficultyLevel * 100).toFixed(0)}%)`;
+                difficultyLevelText.className = 'difficulty-level-text';
+                
+                explanationText.textContent = result.explanation || question.explanation || '';
+                
+                // Show feedback container
+                feedbackContainer.style.display = 'block';
+                
+                // Disable submit button
+                document.getElementById('submitAnswerBtn').disabled = true;
+            },
+            
+            getCorrectAnswerDisplay(question, correctAnswer) {
+                // Handle different question types
+                if (question.question_type === 'multiple_choice' && question.options) {
+                    // Find the option text for the correct answer
+                    const correctOption = question.options.find(option => 
+                        option.startsWith(correctAnswer + '.') || option === correctAnswer
+                    );
+                    return correctOption || correctAnswer;
+                }
+                return correctAnswer || 'Not specified';
+            },
+            
+            getDifficultyLabel(difficultyLevel) {
+                if (difficultyLevel < 0.3) return 'Beginner';
+                if (difficultyLevel < 0.6) return 'Intermediate';
+                if (difficultyLevel < 0.8) return 'Advanced';
+                return 'Expert';
+            },
+            
+            evaluateAIQuestion(userAnswer) {
+                const question = this.currentQuestion;
+                const correctAnswer = question.correct_answer;
+                let isCorrect = false;
+                
+                // Handle different question types
+                if (question.question_type === 'multiple_choice') {
+                    // For multiple choice, check exact match or letter match
+                    isCorrect = userAnswer.toUpperCase() === correctAnswer.toUpperCase() ||
+                               userAnswer.toUpperCase().startsWith(correctAnswer.toUpperCase());
+                } else if (question.question_type === 'true_false') {
+                    // For true/false, check various true/false variations
+                    const userAnswerNormalized = userAnswer.toLowerCase().trim();
+                    const correctAnswerNormalized = correctAnswer.toLowerCase().trim();
+                    
+                    isCorrect = userAnswerNormalized === correctAnswerNormalized ||
+                               (userAnswerNormalized === 'true' && correctAnswerNormalized === 'true') ||
+                               (userAnswerNormalized === 'false' && correctAnswerNormalized === 'false');
+                } else if (question.question_type === 'short_answer') {
+                    // For short answer, use case-insensitive comparison with some flexibility
+                    const userAnswerNormalized = userAnswer.toLowerCase().trim();
+                    const correctAnswerNormalized = correctAnswer.toLowerCase().trim();
+                    
+                    // Exact match
+                    isCorrect = userAnswerNormalized === correctAnswerNormalized;
+                    
+                    // Partial match for short answers (contains the key term)
+                    if (!isCorrect && correctAnswerNormalized.length > 3) {
+                        isCorrect = userAnswerNormalized.includes(correctAnswerNormalized) ||
+                                   correctAnswerNormalized.includes(userAnswerNormalized);
+                    }
+                }
+                
+                return {
+                    is_correct: isCorrect,
+                    correct_answer: correctAnswer,
+                    explanation: question.explanation
+                };
+            },
+            
+            skipQuestion() {
+                // Move to next question without recording response
+                const questionId = this.currentQuestion.id || `ai_${Date.now()}`;
+                this.answeredQuestions.push(questionId);
+                this.loadNextQuestion();
+            },
+            
+            nextQuestion() {
+                if (this.answeredQuestions.length >= 10) {
+                    this.showResults();
+                } else {
+                    this.loadNextQuestion();
+                }
+            },
+            
+            showResults() {
+                this.showScreen('results');
+                
+                const correctAnswers = this.userResponses.filter(r => r.is_correct).length;
+                const totalQuestions = this.userResponses.length;
+                const accuracy = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+                const avgTime = totalQuestions > 0 
+                    ? this.userResponses.reduce((sum, r) => sum + r.response_time, 0) / totalQuestions 
+                    : 0;
+                
+                // Update results display
+                document.getElementById('scorePercentage').textContent = `${Math.round(accuracy)}%`;
+                document.getElementById('scoreText').textContent = 
+                    `You answered ${correctAnswers} out of ${totalQuestions} questions correctly`;
+                document.getElementById('accuracyStat').textContent = `${Math.round(accuracy)}%`;
+                document.getElementById('avgTimeStat').textContent = `${avgTime.toFixed(1)}s`;
+                document.getElementById('finalSkillLevel').textContent = this.userSkillLevel.toFixed(2);
+                
+                // Generate recommendations
+                this.generateRecommendations(accuracy);
+            },
+            
+            generateRecommendations(accuracy) {
+                const recommendationsList = document.getElementById('recommendationsList');
+                recommendationsList.innerHTML = '';
+                
+                let recommendations = [];
+                
+                if (accuracy >= 80) {
+                    recommendations.push("Excellent performance! Consider advanced topics.");
+                    recommendations.push("Try more complex scenarios to challenge yourself.");
+                } else if (accuracy >= 60) {
+                    recommendations.push("Good progress! Focus on weak areas.");
+                    recommendations.push("Review the explanations for incorrect answers.");
+                } else {
+                    recommendations.push("Keep practicing the fundamentals.");
+                    recommendations.push("Consider reviewing study materials for challenging topics.");
+                }
+                
+                recommendations.forEach(rec => {
+                    const recElement = document.createElement('p');
+                    recElement.textContent = `• ${rec}`;
+                    recommendationsList.appendChild(recElement);
+                });
+            },
+            
+            async loadStatistics() {
+                this.showLoading(true);
+                
+                try {
+                    const response = await fetch(this.apiBase + 'stats/');
+                    const stats = await response.json();
+                    
+                    // Update statistics display
+                    if (stats.user_profile) {
+                        const profile = stats.user_profile;
+                        document.getElementById('totalQuestionsStat').textContent = profile.total_questions_answered;
+                        document.getElementById('correctAnswersStat').textContent = profile.correct_answers;
+                        document.getElementById('accuracyRateStat').textContent = `${profile.accuracy_percentage}%`;
+                        document.getElementById('currentSkillLevelStat').textContent = profile.skill_level.toFixed(2);
+                    }
+                    
+                    // Display recent sessions
+                    const sessionsList = document.getElementById('recentSessionsList');
+                    sessionsList.innerHTML = '';
+                    
+                    if (stats.recent_sessions && stats.recent_sessions.length > 0) {
+                        stats.recent_sessions.forEach(session => {
+                            const sessionElement = document.createElement('div');
+                            sessionElement.className = 'session-item';
+                            sessionElement.innerHTML = `
+                                <div class="session-info">
+                                    <span class="session-title">${session.quiz.title}</span>
+                                    <span class="session-score">${session.score}/${session.total_questions}</span>
+                                </div>
+                                <span class="session-date">${new Date(session.start_time).toLocaleDateString()}</span>
+                            `;
+                            sessionsList.appendChild(sessionElement);
+                        });
+                    } else {
+                        sessionsList.innerHTML = '<p>No recent sessions found.</p>';
+                    }
+                    
+                } catch (error) {
+                    console.error('Error loading statistics:', error);
+                    document.getElementById('recentSessionsList').innerHTML = 
+                        '<p>Error loading statistics. Please try again.</p>';
+                } finally {
+                    this.showLoading(false);
+                }
+            },
+            
+            showLoading(show) {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                loadingOverlay.style.display = show ? 'flex' : 'none';
+            }
+        };
+        
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+        
+        // Feedback Test Function
+        function showFeedbackTest() {
+            const testHtml = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 600px; max-height: 80vh; overflow-y: auto; margin: 20px;">
+                        <h2 style="color: #333; margin-bottom: 20px;">🧪 Feedback System Test</h2>
+                        
+                        <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+                            <h3 style="color: #28a745;">✅ Correct Answer Example</h3>
+                            <div style="color: #28a745; font-weight: bold; margin: 10px 0;">Correct! Well done.</div>
+                            <div style="color: #6c757d; font-size: 0.9rem; font-weight: 500; margin: 8px 0; padding: 5px 10px; background-color: #e9ecef; border-radius: 15px; display: inline-block;">
+                                Difficulty: Intermediate (50%)
+                            </div>
+                            <div style="color: #666; margin: 10px 0;">Explanation: Great job! You understand this concept well.</div>
+                        </div>
+                        
+                        <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+                            <h3 style="color: #dc3545;">❌ Incorrect Answer Example</h3>
+                            <div style="color: #dc3545; font-weight: bold; margin: 10px 0;">Incorrect.</div>
+                            <div style="color: #dc3545; font-weight: 600; font-size: 1.1rem; margin: 10px 0; padding: 10px; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px;">
+                                Correct answer: A. Ensure safe and efficient flight operations
+                            </div>
+                            <div style="color: #6c757d; font-size: 0.9rem; font-weight: 500; margin: 8px 0; padding: 5px 10px; background-color: #e9ecef; border-radius: 15px; display: inline-block;">
+                                Difficulty: Advanced (70%)
+                            </div>
+                            <div style="color: #666; margin: 10px 0;">Explanation: Flight dispatchers are responsible for planning, monitoring, and assisting in flight operations to ensure safety and efficiency.</div>
+                        </div>
+                        
+                        <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+                            <h3>🎯 Difficulty Levels</h3>
+                            <div style="color: #6c757d; font-size: 0.9rem; font-weight: 500; margin: 5px 0; padding: 5px 10px; background-color: #e9ecef; border-radius: 15px; display: inline-block; margin-right: 10px;">
+                                Difficulty: Beginner (20%)
+                            </div>
+                            <div style="color: #6c757d; font-size: 0.9rem; font-weight: 500; margin: 5px 0; padding: 5px 10px; background-color: #e9ecef; border-radius: 15px; display: inline-block; margin-right: 10px;">
+                                Difficulty: Intermediate (50%)
+                            </div>
+                            <div style="color: #6c757d; font-size: 0.9rem; font-weight: 500; margin: 5px 0; padding: 5px 10px; background-color: #e9ecef; border-radius: 15px; display: inline-block; margin-right: 10px;">
+                                Difficulty: Advanced (70%)
+                            </div>
+                            <div style="color: #6c757d; font-size: 0.9rem; font-weight: 500; margin: 5px 0; padding: 5px 10px; background-color: #e9ecef; border-radius: 15px; display: inline-block;">
+                                Difficulty: Expert (90%)
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 20px 0; padding: 15px; border: 1px solid #007bff; background-color: #f8f9fa; border-radius: 8px;">
+                            <h3 style="color: #007bff;">🚀 How to Test</h3>
+                            <ol style="color: #333; line-height: 1.6;">
+                                <li>Close this test window</li>
+                                <li>Start a quiz from the main menu</li>
+                                <li>Intentionally answer some questions incorrectly</li>
+                                <li>You should see the enhanced feedback with:</li>
+                                <ul>
+                                    <li>❌ Clear "Incorrect" message</li>
+                                    <li>📝 The correct answer in a red box</li>
+                                    <li>📊 Difficulty level with percentage</li>
+                                    <li>📖 Detailed explanation</li>
+                                </ul>
+                            </ol>
+                        </div>
+                        
+                        <button onclick="this.parentElement.parentElement.remove()" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px;">
+                            Close Test
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', testHtml);
+        }
+        
+        // Add keyboard shortcut for test (Ctrl+Shift+F)
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'F') {
+                e.preventDefault();
+                showFeedbackTest();
+            }
+        });
+        
+        console.log('🧪 Feedback test loaded! Press Ctrl+Shift+F to open test window.');
+    </script>
+</body>
+</html>

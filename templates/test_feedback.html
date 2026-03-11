@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .correct-answer-text {
+            color: #dc3545;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+        }
+        .difficulty-level-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 8px 0;
+            padding: 5px 10px;
+            background-color: #e9ecef;
+            border-radius: 15px;
+            display: inline-block;
+        }
+        .feedback-text.correct { color: #28a745; }
+        .feedback-text.incorrect { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Feedback Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>✅ Correct Answer Example</h2>
+        <div class="feedback-text correct">Correct! Well done.</div>
+        <div class="difficulty-level-text">Difficulty: Intermediate (50%)</div>
+        <div>Explanation: Great job! You understand this concept well.</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>❌ Incorrect Answer Example</h2>
+        <div class="feedback-text incorrect">Incorrect.</div>
+        <div class="correct-answer-text">Correct answer: A. Ensure safe and efficient flight operations</div>
+        <div class="difficulty-level-text">Difficulty: Advanced (70%)</div>
+        <div>Explanation: Flight dispatchers are responsible for planning, monitoring, and assisting in flight operations to ensure safety and efficiency.</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎯 Difficulty Levels</h2>
+        <div class="difficulty-level-text">Difficulty: Beginner (20%)</div>
+        <div class="difficulty-level-text">Difficulty: Intermediate (50%)</div>
+        <div class="difficulty-level-text">Difficulty: Advanced (70%)</div>
+        <div class="difficulty-level-text">Difficulty: Expert (90%)</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🚀 Test Your Quiz</h2>
+        <p>Open your quiz application at <a href="http://127.0.0.1:8000/" target="_blank">http://127.0.0.1:8000/</a></p>
+        <p>Now when you answer questions incorrectly, you should see:</p>
+        <ul>
+            <li>❌ Clear "Incorrect" message</li>
+            <li>📝 The correct answer displayed in a red box</li>
+            <li>📊 Difficulty level with percentage</li>
+            <li>📖 Detailed explanation</li>
+        </ul>
+    </div>
+    
+    <script>
+        console.log('🧪 Feedback test page loaded');
+        console.log('✅ Features implemented:');
+        console.log('   - Correct answer display for wrong answers');
+        console.log('   - Difficulty level indicator');
+        console.log('   - Enhanced styling for feedback');
+        console.log('   - Support for AI-generated questions');
+    </script>
+</body>
+</html>
